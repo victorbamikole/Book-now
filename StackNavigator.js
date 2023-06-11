@@ -11,6 +11,8 @@ import { Ionicons } from "@expo/vector-icons";
 import ProfileScreen from "./screns/ProfileScreen";
 import { NavigationContainer } from "@react-navigation/native";
 import { COLORS } from "./utils/theme";
+import SearchScreen from "./screns/SearchScreen";
+import PlacesScreen from "./screns/PlacesScreen";
 
 export default function StackNavigator() {
   const Tab = createBottomTabNavigator();
@@ -105,6 +107,16 @@ export default function StackNavigator() {
         <Stack.Screen
           name="Main"
           component={BottomBar}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="SearchScreen"
+          component={SearchScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="PlacesScreen"
+          component={PlacesScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
