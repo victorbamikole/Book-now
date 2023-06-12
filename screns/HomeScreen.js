@@ -75,7 +75,7 @@ export default function HomeScreen() {
   };
 
   const searchPlaces = (place) => {
-    if (!route.params || !selectedDate || !route.params.input) {
+    if (!route.params || !selectedDate) {
       Alert.alert("Invalid Details", "Enter all fields", [
         {
           text: "Cancel",
@@ -85,12 +85,12 @@ export default function HomeScreen() {
         { text: "OK", onPress: () => console.log("OK Pressed") },
       ]);
     }
-    if (route.params || selectedDate || route.params.input) {
+    if (route.params || selectedDate) {
       navigation.navigate("PlacesScreen", {
         rooms: rooms,
-        selectedDate: selectedDate,
         adults: adults,
         children: children,
+        selectedDates: selectedDate,
         place: place,
       });
     }

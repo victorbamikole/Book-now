@@ -25,7 +25,7 @@ const PropertyCard = ({
     <View>
       <Pressable
         onPress={() =>
-          navigation.navigate("Info", {
+          navigation.navigate("InfoScreen", {
             name: property.name,
             rating: property.rating,
             oldPrice: property.oldPrice,

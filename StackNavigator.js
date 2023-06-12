@@ -13,6 +13,13 @@ import { NavigationContainer } from "@react-navigation/native";
 import { COLORS } from "./utils/theme";
 import SearchScreen from "./screns/SearchScreen";
 import PlacesScreen from "./screns/PlacesScreen";
+import MapScreen from "./screns/MapScreen";
+import PropertyInfoScreen from "./screns/PropertyInfoScreen";
+import RoomsScreen from "./screns/RoomsScreen";
+import UserScreen from "./screns/UserScreen";
+import ConfirmationScreen from "./screns/ConfirmationScreen";
+import LoginScreen from "./screns/LoginScreen";
+import RegisterScreen from "./screns/RegisterScreen";
 
 export default function StackNavigator() {
   const Tab = createBottomTabNavigator();
@@ -44,7 +51,7 @@ export default function StackNavigator() {
             tabBarLabel: "Saved",
             headerShown: true,
             headerRight: () => (
-                <Ionicons name="notifications-outline" size={24} color="black" />
+              <Ionicons name="notifications-outline" size={24} color="black" />
             ),
             tabBarIcon: ({ focused }) =>
               focused ? (
@@ -105,6 +112,16 @@ export default function StackNavigator() {
         }}
       >
         <Stack.Screen
+          name="LoginScreen"
+          component={LoginScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="RegisterScreen"
+          component={RegisterScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
           name="Main"
           component={BottomBar}
           options={{ headerShown: false }}
@@ -118,6 +135,22 @@ export default function StackNavigator() {
           name="PlacesScreen"
           component={PlacesScreen}
           options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="MapScreen"
+          component={MapScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="InfoScreen"
+          component={PropertyInfoScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen name="RoomsScreen" component={RoomsScreen} />
+        <Stack.Screen name="UserScreen" component={UserScreen} />
+        <Stack.Screen
+          name="ConfirmationScreen"
+          component={ConfirmationScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>
