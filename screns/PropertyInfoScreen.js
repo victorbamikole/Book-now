@@ -37,7 +37,7 @@ const PropertyInfoScreen = () => {
           <Pressable
             style={{ flexDirection: "row", flexWrap: "wrap", margin: 10 }}
           >
-            {route.params.photos.slice(0, 5).map((photo) => (
+            {route.params.photos.slice(0, 5).map((photo, index) => (
               <View style={{ margin: 6 }}>
                 <Image
                   style={{

@@ -17,6 +17,7 @@ const SearchResults = ({ data, input, setInput }) => {
         data={data}
         renderItem={({ item }) => {
           if (item.place.toLowerCase().includes(input.toLowerCase())) {
+         console.log("lower", item.placeImage);
             if (input === "") {
               return null;
             }

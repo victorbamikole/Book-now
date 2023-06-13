@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Feather } from "@expo/vector-icons";
 import SearchResult from "./SearchResult";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../Firebase";
 
 const SearchScreen = () => {
   const [input, setInput] = useState("");
@@ -470,20 +472,20 @@ const SearchScreen = () => {
   const [items, setItems] = useState([]);
 
   useEffect(() => {
-    if (items.length > 0) return;
-
+    // if (items.length > 0) return;
     const fetchProducts = async () => {
       const colRef = collection(db, "places");
 
       const docsSnap = await getDocs(colRef);
       docsSnap.forEach((doc) => {
-        items.push(doc.data());
+        // console.log("doc", doc.data());
+        items.push(doc.data().item);
       });
     };
-
     fetchProducts();
   }, [items]);
   console.log(items);
+
   return (
     <SafeAreaView>
       <View
@@ -506,7 +508,7 @@ const SearchScreen = () => {
         <Feather name="search" size={22} color="black" />
       </View>
 
-      <SearchResult data={data} input={input} setInput={setInput} />
+      <SearchResult data={items} input={input} setInput={setInput} />
     </SafeAreaView>
   );
 };

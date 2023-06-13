@@ -4,6 +4,8 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { BookingsContext } from "../context/BookingsContext";
 import PayStackPay from "../componenets/PayStackPay";
+import { setDoc, doc } from "firebase/firestore";
+import { auth, db } from "../Firebase";
 
 const ConfirmationScreen = () => {
   const route = useRoute();
@@ -28,9 +30,19 @@ const ConfirmationScreen = () => {
     });
   }, []);
 
-  const confirmBooking = () => {
-      bookingsCtx.addBooking(route.params);
-      navigation.navigate("Main");
+  const confirmBooking = async () => {
+     const uid = auth.currentUser.uid;
+    bookingsCtx.addBooking(route.params);
+    await setDoc(
+      doc(db, "users", `${uid}`),
+      {
+        bookingDetails: { ...route.params },
+      },
+      {
+        merge: true,
+      }
+    );
+    navigation.navigate("Main");
   };
 
   return (
@@ -130,7 +142,6 @@ const ConfirmationScreen = () => {
       </View>
 
       <Pressable
-      
         style={{
           backgroundColor: "#003580",
           width: 120,
@@ -140,7 +151,6 @@ const ConfirmationScreen = () => {
           borderRadius: 4,
         }}
       >
-      
         <PayStackPay
           amount={route.params.newPrice * route.params.adults}
           responseHandler={confirmBooking}

@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import React, { useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
@@ -15,6 +15,8 @@ import { SlideAnimation } from "react-native-modals";
 import { ModalTitle } from "react-native-modals";
 import { FontAwesome } from "@expo/vector-icons";
 import { ModalContent } from "react-native-modals";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../Firebase";
 
 const PlacesScreen = () => {
   const route = useRoute();
@@ -481,8 +483,7 @@ const PlacesScreen = () => {
   ];
   console.log("details", route.params);
   const navigation = useNavigation();
-  const [items, setItems] = useState([]);
-  const [sortedData, setSortedData] = useState(data);
+
   const [modalVisibile, setModalVisibile] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState([]);
   console.log("sortedData", sortedData);
@@ -514,10 +515,34 @@ const PlacesScreen = () => {
       filter: "cost:High to Low",
     },
   ];
+
+  const [loading, setLoading] = useState(false);
+  const [items, setItems] = useState([]);
+
+  useEffect(() => {
+    if (items.length > 0) return;
+    setLoading(true);
+    const fetchProducts = async () => {
+      const colRef = collection(db, "places");
+
+      const docsSnap = await getDocs(colRef);
+      docsSnap.forEach((doc) => {
+        // console.log("doc", doc.data());
+        items.push(doc.data().item);
+      });
+      setLoading(false);
+    };
+    fetchProducts();
+  }, [items]);
+  console.log("plz", items.reverse());
+  console.log("data", data);
+
   const searchPlaces = data?.filter(
     (item) => item.place === route.params.place.input
   );
-  console.log("searchPlaces", searchPlaces);
+
+  const [sortedData, setSortedData] = useState(items);
+  console.log("sortedData", sortedData);
 
   const compare = (a, b) => {
     if (a.newPrice > b.newPrice) {
@@ -594,7 +619,30 @@ const PlacesScreen = () => {
           </Text>
         </Pressable>
       </Pressable>
-      <ScrollView style={{ backgroundColor: "#F5F5F5" }}>
+
+      {loading ? (
+        <Text>Fetching places....</Text>
+      ) : (
+        <ScrollView style={{ backgroundColor: "#F5F5F5" }}>
+          {sortedData
+            ?.filter((item) => item.place === route.params.place.input)
+            .map((item) =>
+              item.properties.map((property, index) => (
+                <PropertyCard
+                  key={index}
+                  rooms={route.params.rooms}
+                  children={route.params.children}
+                  adults={route.params.adults}
+                  selectedDates={route.params.selectedDates}
+                  property={property}
+                  availableRooms={property.rooms}
+                />
+              ))
+            )}
+        </ScrollView>
+      )}
+
+      {/* <ScrollView style={{ backgroundColor: "#F5F5F5" }}>
         {sortedData
           ?.filter((item) => item.place === route.params.place.input)
           .map((item) =>
@@ -610,7 +658,7 @@ const PlacesScreen = () => {
               />
             ))
           )}
-      </ScrollView>
+      </ScrollView> */}
       <BottomModal
         onBackdropPress={() => setModalVisibile(!modalVisibile)}
         swipeDirection={["up", "down"]}
